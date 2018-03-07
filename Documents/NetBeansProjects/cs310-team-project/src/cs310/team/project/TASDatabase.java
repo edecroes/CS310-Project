@@ -19,5 +19,31 @@ public class TASDatabase {
             System.out.println(ex.toString());
         }
     }
-
+    public Badge getBadge(String badgeid) throws SQLException{
+        Statement s = conn.createStatement();
+        ResultSet r = s.executeQuery("SELECT * FROM badge WHERE id =\'"+badgeid+"\'");
+        if(r != null){
+            String id = r.getString("id");
+            String desc = r.getString("description");
+            return new Badge(id,desc);
+        }
+        throw new SQLException("Bad BadgeID");
+    }
+    /**
+     * copy above
+     * @param punchid
+     * @return
+     * @throws SQLException 
+     */
+    public Punch getPunch(String punchid) throws SQLException{
+        return null;
+    }
+    
+    public Shift getShift(String shiftid) throws SQLException{
+        return null;
+    }
+    
+    public Shift getShift(Badge b) throws SQLException{
+        return null;
+    }
 }

@@ -1,5 +1,6 @@
 package cs310.team.project;
 import java.sql.*;
+import java.util.*;
 
 public class TASDatabase {
     Connection conn;
@@ -36,14 +37,75 @@ public class TASDatabase {
      * @throws SQLException 
      */
     public Punch getPunch(String punchid) throws SQLException{
-        return null;
+        Statement s = conn.createStatement();
+        ResultSet r = s.executeQuery("SELECT * FROM punch WHERE id =\'"+punchid+"\'");
+        if(r != null){
+            int id = r.getInt("id");
+            int terminalid = r.getInt("terminalid");
+            String badgeid = r.getString("badgeid");
+            GregorianCalendar originaltimestamp = getCalendar(r.getString("originaltimestamp"));
+            boolean eventtypeid = r.getBoolean("eventtypeid");
+            
+            
+            return new Punch(id,terminalid,badgeid,originaltimestamp,eventtypeid,null); //always null for some reason
+            //RETURN new punch(POW*)
+            
+            //return new Punch()
+        }
+        throw new SQLException("Bad PunchID");
     }
     
-    public Shift getShift(String shiftid) throws SQLException{
-        return null;
+    public Shift getShift(int shiftid) throws SQLException{
+        //NOT MODIFIED YET
+        Statement s = conn.createStatement();
+        ResultSet r = s.executeQuery("SELECT * FROM shift WHERE id =\'"+shiftid+"\'");
+        if(r != null){
+            String id = r.getString("id");
+            String desc = r.getString("description");
+            
+            
+            
+            
+        }
+        throw new SQLException("Bad ShiftID");
+        
+        return new Shift();
     }
     
     public Shift getShift(Badge b) throws SQLException{
-        return null;
+        Statement s = conn.createStatement();
+        ResultSet r2 = s.executeQuery("SELECT * FROM employee WHERE id =\'"+b.getid()+"\'");
+        ResultSet r = s.executeQuery("SELECT * FROM shift WHERE id =\'"+r2.getString("shiftid")+"\'");
+        if(r != null){
+            String id = r.getString("id");
+            String desc = r.getString("description");
+            
+            
+            
+            
+        }
+        throw new SQLException("Bad ShiftID");
+        
+        return new Shift();
+    }
+    
+    
+    
+    public static GregorianCalendar getCalendar(String cid){
+        //2017-08-01 05:54:04
+        
+        int year = Integer.getInteger(cid.substring(0,4));
+        int month = Integer.getInteger(cid.substring(5,7));
+        int dayOfMonth = Integer.getInteger(cid.substring(8,10));
+        int hourOfDay = Integer.getInteger(cid.substring(11,13));
+        int minute = Integer.getInteger(cid.substring(14,16));
+        int second = Integer.getInteger(cid.substring(17,19));
+        
+        System.out.println(cid);
+        System.out.println(year + " " + month + " " + dayOfMonth+ " " + hourOfDay+ " "+ minute + " " + second);
+        
+        return new GregorianCalendar(year,month,dayOfMonth, hourOfDay, minute, second);
+        
+        
     }
 }

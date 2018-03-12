@@ -59,34 +59,52 @@ public class TASDatabase {
         //NOT MODIFIED YET
         Statement s = conn.createStatement();
         ResultSet r = s.executeQuery("SELECT * FROM shift WHERE id =\'"+shiftid+"\'");
+        String desc;
+        int id,interval,graceperiod,dock,lunchdeduct;
+        GregorianCalendar start,stop,lunchstart,lunchstop;
         if(r != null){
-            String id = r.getString("id");
-            String desc = r.getString("description");
-            
-            
-            
+            id = r.getInt("id");
+            desc = r.getString("description");
+            start = (GregorianCalendar) (getCalendar(r.getString("start")));
+            stop = (GregorianCalendar) (getCalendar(r.getString("stop")));
+            interval = r.getInt("interval");
+            graceperiod = r.getInt("graceperiod");
+            dock = r.getInt("dock");
+            lunchstart = (GregorianCalendar) (getCalendar(r.getString("lunchstart")));
+            lunchstop = (GregorianCalendar) (getCalendar(r.getString("lunchstop")));
+            lunchdeduct = r.getInt("lunchdeduct");
             
         }
-        throw new SQLException("Bad ShiftID");
+        else
+            throw new SQLException("Bad ShiftID");
         
-        return new Shift();
+        return new Shift(id,desc,start,stop,interval,graceperiod,dock,lunchstart,lunchstop,lunchdeduct);
     }
     
     public Shift getShift(Badge b) throws SQLException{
         Statement s = conn.createStatement();
         ResultSet r2 = s.executeQuery("SELECT * FROM employee WHERE id =\'"+b.getid()+"\'");
         ResultSet r = s.executeQuery("SELECT * FROM shift WHERE id =\'"+r2.getString("shiftid")+"\'");
-        if(r != null){
-            String id = r.getString("id");
-            String desc = r.getString("description");
-            
-            
-            
+        String desc;
+        int id,interval,graceperiod,dock,lunchdeduct;
+        GregorianCalendar start,stop,lunchstart,lunchstop;
+       if(r != null){
+            id = r.getInt("id");
+            desc = r.getString("description");
+            start = (GregorianCalendar) (getCalendar(r.getString("start")));
+            stop = (GregorianCalendar) (getCalendar(r.getString("stop")));
+            interval = r.getInt("interval");
+            graceperiod = r.getInt("graceperiod");
+            dock = r.getInt("dock");
+            lunchstart = (GregorianCalendar) (getCalendar(r.getString("lunchstart")));
+            lunchstop = (GregorianCalendar) (getCalendar(r.getString("lunchstop")));
+            lunchdeduct = r.getInt("lunchdeduct");
             
         }
-        throw new SQLException("Bad ShiftID");
+        else
+            throw new SQLException("Bad ShiftID");
         
-        return new Shift();
+        return new Shift(id,desc,start,stop,interval,graceperiod,dock,lunchstart,lunchstop,lunchdeduct);
     }
     
     

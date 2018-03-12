@@ -25,4 +25,11 @@ public void setdescription(String description) {
 	this.description = description;
 }
 
+@Override
+public String toString() {
+
+    return "#"+this.id+" ("+this.description+")";
+
+}
+
 }

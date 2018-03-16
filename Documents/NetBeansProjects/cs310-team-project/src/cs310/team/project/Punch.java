@@ -71,12 +71,13 @@ public String printOriginalTimestamp() {
     //"#D2C39273 CLOCKED IN: WED 09/06/2017 07:00:07"
 
     //format string: "EEE "
-    SimpleDateFormat s = new SimpleDateFormat("EEE ");      
-    return "#"+this.id+" CLOCKED IN "+s.format()+ 
+    SimpleDateFormat s = new SimpleDateFormat("EEE MM/dd/yyyy HH:mm:ss");      
     
+    String ots = s.format(this.originaltimestamp.getTime()).toUpperCase(); 
+    
+    return "#"+this.badgeid+" CLOCKED IN: "+ ots;
+
+
 }
-
-
-
 
 }

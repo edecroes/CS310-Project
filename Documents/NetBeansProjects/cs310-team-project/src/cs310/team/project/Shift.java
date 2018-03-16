@@ -1,22 +1,23 @@
 package cs310.team.project;
 import java.util.*;
+import java.sql.*;
 
 public class Shift {
 
 private int id;
 private String description;
-private GregorianCalendar start; //these GregorianCalendar objects should only contain time values and only compared against their time instance variables!
-private GregorianCalendar stop;
+private Time start; //these GregorianCalendar objects should only contain time values and only compared against their time instance variables!
+private Time stop;
 private int interval;
 private int graceperiod;
 private int dock;
-private GregorianCalendar lunchstart;
-private GregorianCalendar lunchstop;
+private Time lunchstart;
+private Time lunchstop;
 private int lunchdeduct;
 
-public Shift(int id, String description, GregorianCalendar start, GregorianCalendar stop, int interval, int graceperiod, int dock, GregorianCalendar lunchstart, GregorianCalendar lunchstop, int lunchdeduct) {
+public Shift(int id, String description, Time start, Time stop, int interval, int graceperiod, int dock, Time lunchstart, Time lunchstop, int lunchdeduct) {
 	this.id = id;
-	this.description;
+	this.description = description;
 	this.start = start;
 	this.stop = stop;
 	this.interval = interval;
@@ -27,11 +28,11 @@ public Shift(int id, String description, GregorianCalendar start, GregorianCalen
 	this.lunchdeduct = lunchdeduct;
 }
 
-public String getid() {
+public int getid() {
 	return this.id;
 }
 
-public void setid(String id) {
+public void setid(int id) {
 	this.id = id;
 }
 
@@ -43,19 +44,19 @@ public void setdescription(String description) {
 	this.description = description;
 }
 
-public GregorianCalendar getstart() {
+public Time getstart() {
 	return this.start;
 }
 
-public void setstart(GregorianCalendar start) {
+public void setstart(Time start) {
 	this.start = start;
 }
 
-public GregorianCalendar getstop() {
+public Time getstop() {
 	return this.stop;
 }
 
-public void setstop(GregorianCalendar stop) {
+public void setstop(Time stop) {
 	this.stop = stop;
 }
 
@@ -64,7 +65,7 @@ public int getgraceperiod() {
 }
 
 public void setgraceperiod(int graceperiod) {
-	this.start = start;
+	this.graceperiod = graceperiod;
 }
 
 public int getinterval() {
@@ -83,19 +84,19 @@ public void setdock(int dock) {
 	this.dock = dock;
 }
 
-public GregorianCalendar getlunchstart() {
+public Time getlunchstart() {
 	return this.lunchstart;
 }
 
-public void setlunchstart(GregorianCalendar lunchstart) {
+public void setlunchstart(Time lunchstart) {
 	this.lunchstart = lunchstart;
 }
 
-public GregorianCalendar getlunchstop() {
+public Time getlunchstop() {
 	return this.lunchstop;
 }
 
-public void setlunchstop(GregorianCalendar lunchstop) {
+public void setlunchstop(Time lunchstop) {
 	this.lunchstop = lunchstop;
 }
 

@@ -5,7 +5,7 @@ import java.util.*;
 public class TASDatabase {
     Connection conn;
     
-    public TASDatabase() throws SQLException{
+    public TASDatabase() {
         
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -17,10 +17,11 @@ public class TASDatabase {
         } 
         
         catch (Exception ex) {
-            System.out.println(ex.toString());
+            System.out.println(ex.toString()+" CONNECTION FAILED");
         }
     }
-    public Badge getBadge(String badgeid) throws SQLException{
+    public Badge getBadge(String badgeid){
+        try {
         Statement s = conn.createStatement();
         ResultSet r = s.executeQuery("SELECT * FROM badge WHERE id =\'"+badgeid+"\'");
         if(r != null){
@@ -28,7 +29,9 @@ public class TASDatabase {
             String desc = r.getString("description");
             return new Badge(id,desc);
         }
-        throw new SQLException("Bad BadgeID");
+        }
+        catch(Exception e) {System.out.println(e.toString());}
+        return null;
     }
     /**
      * copy above
@@ -36,79 +39,87 @@ public class TASDatabase {
      * @return
      * @throws SQLException 
      */
-    public Punch getPunch(String punchid) throws SQLException{
-        Statement s = conn.createStatement();
-        ResultSet r = s.executeQuery("SELECT * FROM punch WHERE id =\'"+punchid+"\'");
-        if(r != null){
+    public Punch getPunch(int punchid) {
+        try {
+            Statement s = conn.createStatement();
+            ResultSet r = s.executeQuery("SELECT *,UNIX_TIMESTAMP(originaltimestamp)*1000 AS ts FROM event WHERE id ='"+punchid+"'");
+            r.beforeFirst();
+            r.next();
             int id = r.getInt("id");
             int terminalid = r.getInt("terminalid");
             String badgeid = r.getString("badgeid");
-            GregorianCalendar originaltimestamp = getCalendar(r.getString("originaltimestamp"));
+            long ts = r.getLong("ts");
+            GregorianCalendar originaltimestamp = new GregorianCalendar();
+            originaltimestamp.setTimeInMillis(ts);
             boolean eventtypeid = r.getBoolean("eventtypeid");
-            
-            
+            r.close();
+            s.close();
             return new Punch(id,terminalid,badgeid,originaltimestamp,eventtypeid,null); //always null for some reason
             //RETURN new punch(POW*)
             
             //return new Punch()
         }
-        throw new SQLException("Bad PunchID");
+        catch(Exception e ){ System.out.println(e.toString()+": NOT A PUNCH");}
+        return null;
+    
     }
     
-    public Shift getShift(int shiftid) throws SQLException{
+    public Shift getShift(int shiftid){
         //NOT MODIFIED YET
-        Statement s = conn.createStatement();
-        ResultSet r = s.executeQuery("SELECT * FROM shift WHERE id =\'"+shiftid+"\'");
+       
         String desc;
         int id,interval,graceperiod,dock,lunchdeduct;
-        GregorianCalendar start,stop,lunchstart,lunchstop;
-        if(r != null){
+        Time start,stop,lunchstart,lunchstop;
+        try{
+            Statement s = conn.createStatement();
+            ResultSet r = s.executeQuery("SELECT * FROM shift WHERE id =\'"+shiftid+"\'");
             id = r.getInt("id");
             desc = r.getString("description");
-            start = (GregorianCalendar) (getCalendar(r.getString("start")));
-            stop = (GregorianCalendar) (getCalendar(r.getString("stop")));
+            start = Time.valueOf(r.getString("start"));
+            stop = Time.valueOf(r.getString(r.getString("stop")));
             interval = r.getInt("interval");
             graceperiod = r.getInt("graceperiod");
             dock = r.getInt("dock");
-            lunchstart = (GregorianCalendar) (getCalendar(r.getString("lunchstart")));
-            lunchstop = (GregorianCalendar) (getCalendar(r.getString("lunchstop")));
+            lunchstart = Time.valueOf(r.getString("lunchstart"));
+            lunchstop = Time.valueOf(r.getString("lunchstop"));
             lunchdeduct = r.getInt("lunchdeduct");
+            return new Shift(id,desc,start,stop,interval,graceperiod,dock,lunchstart,lunchstop,lunchdeduct);
             
         }
-        else
-            throw new SQLException("Bad ShiftID");
+        catch(Exception e ) {System.out.println(e.toString());}
+        return null;
         
-        return new Shift(id,desc,start,stop,interval,graceperiod,dock,lunchstart,lunchstop,lunchdeduct);
     }
     
-    public Shift getShift(Badge b) throws SQLException{
-        Statement s = conn.createStatement();
-        ResultSet r2 = s.executeQuery("SELECT * FROM employee WHERE id =\'"+b.getid()+"\'");
-        ResultSet r = s.executeQuery("SELECT * FROM shift WHERE id =\'"+r2.getString("shiftid")+"\'");
+    public Shift getShift(Badge b){
+       
         String desc;
         int id,interval,graceperiod,dock,lunchdeduct;
-        GregorianCalendar start,stop,lunchstart,lunchstop;
-       if(r != null){
+        Time start,stop,lunchstart,lunchstop;
+       try{
+            Statement s = conn.createStatement();
+            ResultSet r2 = s.executeQuery("SELECT * FROM employee WHERE id =\'"+b.getid()+"\'");
+            ResultSet r = s.executeQuery("SELECT * FROM shift WHERE id =\'"+r2.getString("shiftid")+"\'");
             id = r.getInt("id");
             desc = r.getString("description");
-            start = (GregorianCalendar) (getCalendar(r.getString("start")));
-            stop = (GregorianCalendar) (getCalendar(r.getString("stop")));
+            start = Time.valueOf(r.getString("start"));
+            stop = Time.valueOf(r.getString("stop"));
             interval = r.getInt("interval");
             graceperiod = r.getInt("graceperiod");
             dock = r.getInt("dock");
-            lunchstart = (GregorianCalendar) (getCalendar(r.getString("lunchstart")));
-            lunchstop = (GregorianCalendar) (getCalendar(r.getString("lunchstop")));
+            lunchstart = Time.valueOf(r.getString("lunchstart"));
+            lunchstop = Time.valueOf(r.getString("lunchstop"));
             lunchdeduct = r.getInt("lunchdeduct");
+            return new Shift(id,desc,start,stop,interval,graceperiod,dock,lunchstart,lunchstop,lunchdeduct);
             
         }
-        else
-            throw new SQLException("Bad ShiftID");
+        catch(Exception e) {System.out.println(e.toString());}
+        return null;
         
-        return new Shift(id,desc,start,stop,interval,graceperiod,dock,lunchstart,lunchstop,lunchdeduct);
     }
     
     
-    
+    /**
     public static GregorianCalendar getCalendar(String cid){
         //2017-08-01 05:54:04
         
@@ -125,5 +136,18 @@ public class TASDatabase {
         return new GregorianCalendar(year,month,dayOfMonth, hourOfDay, minute, second);
         
         
+    }
+    */
+    
+    
+    public int insertPunch(Punch p) throws SQLException{
+        //Gusztav, Kuvvat
+        return 0;
+    }
+
+    public ArrayList getDailyPunchList(Badge b, GregorianCalendar ts){
+        //Who?
+        
+        return null;
     }
 }

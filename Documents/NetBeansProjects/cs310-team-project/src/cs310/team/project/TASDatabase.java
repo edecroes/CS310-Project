@@ -23,14 +23,15 @@ public class TASDatabase {
     public Badge getBadge(String badgeid){
         try {
         Statement s = conn.createStatement();
-        ResultSet r = s.executeQuery("SELECT * FROM badge WHERE id =\'"+badgeid+"\'");
-        if(r != null){
-            String id = r.getString("id");
-            String desc = r.getString("description");
-            return new Badge(id,desc);
+        ResultSet r = s.executeQuery("SELECT * FROM badge WHERE id ='"+badgeid+"';");
+        r.next();
+        
+        String id = r.getString("id");
+        String desc = r.getString("description");
+        return new Badge(id,desc);
+        
         }
-        }
-        catch(Exception e) {System.out.println(e.toString());}
+        catch(SQLException e) {System.out.println(e.toString()+" BADGE GET FAIL");}
         return null;
     }
     /**
@@ -51,7 +52,7 @@ public class TASDatabase {
             long ts = r.getLong("ts");
             GregorianCalendar originaltimestamp = new GregorianCalendar();
             originaltimestamp.setTimeInMillis(ts);
-            boolean eventtypeid = r.getBoolean("eventtypeid");
+            int eventtypeid = r.getInt("eventtypeid");
             r.close();
             s.close();
             return new Punch(id,terminalid,badgeid,originaltimestamp,eventtypeid,null); //always null for some reason
@@ -72,7 +73,8 @@ public class TASDatabase {
         Time start,stop,lunchstart,lunchstop;
         try{
             Statement s = conn.createStatement();
-            ResultSet r = s.executeQuery("SELECT * FROM shift WHERE id =\'"+shiftid+"\'");
+            ResultSet r = s.executeQuery("SELECT * FROM shift WHERE id ='"+shiftid+"';");
+            r.next();
             id = r.getInt("id");
             desc = r.getString("description");
             start = Time.valueOf(r.getString("start"));
@@ -86,7 +88,7 @@ public class TASDatabase {
             return new Shift(id,desc,start,stop,interval,graceperiod,dock,lunchstart,lunchstop,lunchdeduct);
             
         }
-        catch(Exception e ) {System.out.println(e.toString());}
+        catch(Exception e ) {System.out.println(e.toString()+": GET SHIFT ON ID FAIL");}
         return null;
         
     }
@@ -113,7 +115,7 @@ public class TASDatabase {
             return new Shift(id,desc,start,stop,interval,graceperiod,dock,lunchstart,lunchstop,lunchdeduct);
             
         }
-        catch(Exception e) {System.out.println(e.toString());}
+        catch(Exception e) {System.out.println(e.toString()+": GET SHIFT ON BADGE FAIL");}
         return null;
         
     }

@@ -108,6 +108,25 @@ public void setlunchdeduct(int lunchdeduct) {
 	this.lunchdeduct = lunchdeduct;
 }
 
+//assertEquals(s1.toString(), "Shift 1: 07:00 - 15:30 (510 minutes); Lunch: 12:00 - 12:30 (30 minutes)");
+  //      assertEquals(s2.toString(), "Shift 2: 12:00 - 20:30 (510 minutes); Lunch: 16:30 - 17:00 (30 minutes)");
+    //    assertEquals(s3.toString(), "Shift 1 Early Lunch: 07:00 - 15:30 (510 minutes); Lunch: 11:30 - 12:00 (30 minutes)");
 
+
+
+@Override
+public String toString() {
+    String s = "";
+    s+=this.getdescription()+": "+this.getstart().substring(0,5)+" - "+this.getstop().substring(0,5)
+          +" ("+millisecondConverter(0)+" minutes); Lunch: "+this.getlunchstart().toString().substring(0,5)
+          +" - "this.getlunchstop().toString().substring(0,5)+" ("+millisecondConverter(0) + " minutes)";
+    
+    
+    return s;
+}
+
+public String millisecondConverter(long millis) {
+    return String.valueOf((millis/1000)/60);
+}
 
 }

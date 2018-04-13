@@ -116,17 +116,19 @@ public void setlunchdeduct(int lunchdeduct) {
 
 @Override
 public String toString() {
-    String s = "";
-    s+=this.getdescription()+": "+this.getstart().substring(0,5)+" - "+this.getstop().substring(0,5)
-          +" ("+millisecondConverter(0)+" minutes); Lunch: "+this.getlunchstart().toString().substring(0,5)
-          +" - "this.getlunchstop().toString().substring(0,5)+" ("+millisecondConverter(0) + " minutes)";
     
-    
-    return s;
+    return this.getdescription()+": "+this.getstart().toString().substring(0,5)+" - "
+            +this.getstop().toString().substring(0,5)
+            +" ("+timeBetween(this.getstart(),this.getstop())+" minutes); Lunch: "
+            +this.getlunchstart().toString().substring(0,5)
+            +" - "+this.getlunchstop().toString().substring(0,5)
+            +" ("+timeBetween(this.getlunchstart(),this.getlunchstop()) + " minutes)";
 }
 
-public String millisecondConverter(long millis) {
+public String timeBetween(Time x,Time y) {
+    
+    long millis = y.getTime() - x.getTime();
     return String.valueOf((millis/1000)/60);
 }
-
 }
+

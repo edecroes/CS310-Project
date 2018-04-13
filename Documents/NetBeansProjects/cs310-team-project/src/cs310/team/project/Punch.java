@@ -7,10 +7,10 @@ private int id;
 private int terminalid;
 private String badgeid;
 private GregorianCalendar originaltimestamp;
-private boolean eventtypeid;
+private int eventtypeid;
 private Object eventdata;
 
-public Punch(int id, int terminalid, String badgeid, GregorianCalendar originaltimestamp, boolean eventtypeid, Object eventdata) {
+public Punch(int id, int terminalid, String badgeid, GregorianCalendar originaltimestamp, int eventtypeid, Object eventdata) {
 	this.id = id;
 	this.terminalid = terminalid;
 	this.badgeid = badgeid;
@@ -51,11 +51,11 @@ public void setoriginaltimestamp(GregorianCalendar originaltimestamp) {
 	this.originaltimestamp = originaltimestamp;
 }
 
-public boolean geteventtypeid() {
+public int geteventtypeid() {
 	return this.eventtypeid;
 }
 
-public void seteventtypeid(boolean eventtypeid) {
+public void seteventtypeid(int eventtypeid) {
 	this.eventtypeid = eventtypeid;
 }
 

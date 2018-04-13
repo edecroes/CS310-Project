@@ -23,7 +23,7 @@ public class TASDatabase {
     public Badge getBadge(String badgeid){
         try {
         Statement s = conn.createStatement();
-        ResultSet r = s.executeQuery("SELECT * FROM badge WHERE id ='"+badgeid+"';");
+        ResultSet r = s.executeQuery("SELECT * FROM badge WHERE id ='"+badgeid+"'");
         r.next();
         
         String id = r.getString("id");
@@ -73,12 +73,12 @@ public class TASDatabase {
         Time start,stop,lunchstart,lunchstop;
         try{
             Statement s = conn.createStatement();
-            ResultSet r = s.executeQuery("SELECT * FROM shift WHERE id ='"+shiftid+"';");
+            ResultSet r = s.executeQuery("SELECT * FROM shift WHERE id ='"+shiftid+"'");
             r.next();
             id = r.getInt("id");
             desc = r.getString("description");
             start = Time.valueOf(r.getString("start"));
-            stop = Time.valueOf(r.getString(r.getString("stop")));
+            stop = Time.valueOf(r.getString("stop"));
             interval = r.getInt("interval");
             graceperiod = r.getInt("graceperiod");
             dock = r.getInt("dock");
@@ -95,24 +95,11 @@ public class TASDatabase {
     
     public Shift getShift(Badge b){
        
-        String desc;
-        int id,interval,graceperiod,dock,lunchdeduct;
-        Time start,stop,lunchstart,lunchstop;
        try{
             Statement s = conn.createStatement();
-            ResultSet r2 = s.executeQuery("SELECT * FROM employee WHERE id =\'"+b.getid()+"\'");
-            ResultSet r = s.executeQuery("SELECT * FROM shift WHERE id =\'"+r2.getString("shiftid")+"\'");
-            id = r.getInt("id");
-            desc = r.getString("description");
-            start = Time.valueOf(r.getString("start"));
-            stop = Time.valueOf(r.getString("stop"));
-            interval = r.getInt("interval");
-            graceperiod = r.getInt("graceperiod");
-            dock = r.getInt("dock");
-            lunchstart = Time.valueOf(r.getString("lunchstart"));
-            lunchstop = Time.valueOf(r.getString("lunchstop"));
-            lunchdeduct = r.getInt("lunchdeduct");
-            return new Shift(id,desc,start,stop,interval,graceperiod,dock,lunchstart,lunchstop,lunchdeduct);
+            ResultSet r = s.executeQuery("SELECT * FROM employee WHERE badgeid ='"+b.getid()+"'");
+            r.next();
+            return getShift(r.getInt("shiftid"));
             
         }
         catch(Exception e) {System.out.println(e.toString()+": GET SHIFT ON BADGE FAIL");}

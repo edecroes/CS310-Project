@@ -71,11 +71,19 @@ public String printOriginalTimestamp() {
     //"#D2C39273 CLOCKED IN: WED 09/06/2017 07:00:07"
 
     //format string: "EEE "
-    SimpleDateFormat s = new SimpleDateFormat("EEE MM/dd/yyyy HH:mm:ss");      
+    SimpleDateFormat s2 = new SimpleDateFormat("EEE MM/dd/yyyy HH:mm:ss");      
     
-    String ots = s.format(this.originaltimestamp.getTime()).toUpperCase(); 
+    String ots = s2.format(this.originaltimestamp.getTime()).toUpperCase(); 
+    String s = "";
     
-    return "#"+this.badgeid+" CLOCKED IN: "+ ots;
+    switch(this.eventtypeid){
+        case 0: s =" CLOCKED OUT: "; break;
+        case 1: s =" CLOCKED IN: "; break;
+        case 2: s =" TIMED OUT: "; break;
+        default: s =" ERROR??? "; break;
+    }
+    
+    return "#"+this.badgeid+s+ots;
 
 
 }
